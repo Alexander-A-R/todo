@@ -4,10 +4,11 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
 
 module.exports = {
+	mode: 'development',
 	context: path.resolve(__dirname, 'src'),
+	devtool: 'source-map',
 	entry: {
 		main: './js/index.js',
-		analythics: './js/analythics.js'
 	},
 	output: {
 		path: path.resolve(__dirname, 'dist'),
@@ -27,6 +28,5 @@ module.exports = {
 				use: ['style-loader', 'css-loader']
 			}
 		]
-	},
-	mode: 'development'
+	}
 }

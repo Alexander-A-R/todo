@@ -1,5 +1,6 @@
 import '../styles/styles.css';
-import {createModal} from './modal.js';
+import {createModal, closeModal} from './modal.js';
+import {createFormAddTodo} from './form.js';
 
 const todosList = {
 	1: {
@@ -34,7 +35,7 @@ const todosList = {
 		id: 4
 	},
 	5: {
-		title: 'задача',
+		title: 'задача ',
 		description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium reiciendis sequi, accusamus amet rerum exercitationem, veritatis ratione fuga culpa similique deleniti explicabo consequuntur unde a perspiciatis facilis animi expedita assumenda!',
 		status: 'shedule',
 		id: 5
@@ -45,33 +46,9 @@ const todosList = {
 
 renderAllTodos(todosList);
 
-document.querySelector('.addTodo').addEventListener('click', showModalAddTodo);
-document.querySelector('.modal__close').addEventListener('click', closeModalAddTodo);
-
-document.querySelector('.modal').addEventListener('click', (e) => {
-	if (!e.target.closest('.modal__content')) {
-		closeModalAddTodo();
-	}
-})
-
-document.querySelector('.form__control')
-	.lastElementChild
-	.addEventListener('click', closeModalAddTodo); // установка обработчика на ккнопку отмена
-
-document.querySelector('.form__control')		// установка обработчика на кнопку добавить в модальном окне
-	.firstElementChild
-	.addEventListener('click', () => {
-		const todo = getTodoFromForm();
-		todo.id = getNewId();
-		todo.status = 'shedule';
-		addTodo(todo);
-		const container = document.createElement('div');
-		container.classList.add('todos__item');
-		container.append(createTodoHtml(todo));
-
-		document.querySelector('.shedule > .todos').append(container);;
-
-		closeModalAddTodo();
+document.querySelector('.addTodo').addEventListener('click', () => {
+	const modal = createModal(createFormAddTodo());
+	document.body.append(modal);
 });
 
 function deleteTodo(id) {
@@ -94,25 +71,6 @@ function toggleTodo(todoElement, section = 'current') {
 		todos.append(todoItem);
 		todoObj.status = 'current';
 	}
-}
-
-
-
-function showModalAddTodo() {
-	
-	document.body.append(createModal(form));
-
-
-	/*const modal = document.querySelector('.modal');
-	modal.classList.add('modal_active');*/
-	document.body.classList.add('hidden');
-}
-
-function closeModalAddTodo() {
-	const modal = document.querySelector('.modal');
-	modal.classList.remove('modal_active');
-	document.body.classList.remove('hidden');
-	document.querySelector('.form').firstElementChild.reset();
 }
 
 function addTodo(todo) {
@@ -168,7 +126,7 @@ function createTodoHtml(todoObj) { // создаёт html задачи
 
 	const close = document.createElement('button');
 	close.addEventListener('click', (e) => {
-		document.body.append(createModal('Удалить?'));
+		//document.body.append(createModal('Удалить?'));
 		const todo = e.target.closest('.todo');
 		const id = todo.dataset.id;
 		deleteTodo(id);
@@ -238,3 +196,4 @@ function hideFullDescription(event) { // скрывает полное опис�
 }
 
 
+export {addTodo, createTodoHtml, getNewId}

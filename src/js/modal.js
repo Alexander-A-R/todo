@@ -1,6 +1,11 @@
 function createModal(contentElement) {
 	const modal = document.createElement('div');
-	modal.classList.add('modal', 'modal_active');
+	modal.addEventListener('click', (e) => {
+		if (!e.target.closest('.modal__content')) {
+			closeModal();
+		}
+	})
+	modal.classList.add('modal');
 
 	const modalBody = document.createElement('div');
 	modalBody.classList.add('modal__body');
@@ -8,11 +13,21 @@ function createModal(contentElement) {
 	const modalContent = document.createElement('div');
 	modalContent.classList.add('modal__content');
 
+	const closeBtn = document.createElement('button');
+	closeBtn.addEventListener('click', closeModal);
+	closeBtn.classList.add('modal__close', 'close-btn');
+
 	modalContent.append(contentElement);
+	modalContent.append(closeBtn);
 	modalBody.append(modalContent);
 	modal.append(modalBody);
 
 	return modal;
 }
 
-export {createModal};
+function closeModal() {
+	const modal = document.querySelector('.modal');
+	modal.remove();
+}
+
+export {createModal, closeModal};
