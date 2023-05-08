@@ -1,6 +1,6 @@
 import {closeModal} from './modal.js';
-import {getTodoFromForm} from './todo.logic.js'
-import {addTodo, createTodoHtml, getNewId} from './index.js'
+import {createTodoHtml, getNewId, renderTodo, parseFromBack} from './index.js'
+import {asyncAddTodo} from './database.js'
 
 function createFormAddTodo() {
 	const formDiv = document.createElement('div');
@@ -49,20 +49,16 @@ function createFormAddTodo() {
 	form.append(table);
 
 	const buttonAdd = document.createElement('button');
+
 	buttonAdd.type = 'button';
 	buttonAdd.innerHTML = 'Создать';
 	buttonAdd.classList.add('form__button');
+
 	buttonAdd.addEventListener('click', () => {
-		const todo = getTodoFromForm();
-		todo.id = getNewId();
-		todo.status = 'shedule';
-		addTodo(todo);
-		const container = document.createElement('div');
-		container.classList.add('todos__item');
-		container.append(createTodoHtml(todo));
-
-		document.querySelector('.shedule > .todos').append(container);
-
+		const newTodoData = getTodoFromForm();
+		asyncAddTodo(newTodoData).then(todo => {
+			renderTodo(parseFromBack(todo));
+		})
 		closeModal();
 	})
 
@@ -83,6 +79,22 @@ function createFormAddTodo() {
 	formDiv.append(form);
 
 	return formDiv;
+}
+
+function getTodoFromForm() {
+	const formData = {
+		status: 'shedule'
+	}
+
+	const form = document.querySelector('.form').firstElementChild;
+	const formElements = form.elements;
+	
+	formData.title = formElements.title.value;
+	formData.description = formElements.description.value;
+
+	form.reset();
+	
+	return formData;
 }
 
 export {createFormAddTodo};

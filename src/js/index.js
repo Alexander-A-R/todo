@@ -1,50 +1,33 @@
 import '../styles/styles.css';
+import '../styles/style.scss';
 import {createModal, closeModal} from './modal.js';
 import {createFormAddTodo} from './form.js';
+import {toggleStatus} from './database.js';
 
-const todosList = {
-	1: {
-		title: 'Задачник',
-		description: 'сделать задачник',
-		comments: [
-			'данные нужно хранить в JSON файле',
-			'комментарии должны храниться в массиве'
-		 ],
-		status: 'current',
-		id: 1
-	},
-	2: {
-		title: 'Слайдер',
-		description: 'сделать слайдер, с возможностью загружать разные картинки',
-		comments: [
-			'.........',
-		],
-		status: 'shedule',
-		id: 2
-	},
-	3: {
-		title: 'задача',
-		description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium reiciendis sequi, accusamus amet rerum exercitationem, veritatis ratione fuga culpa similique deleniti explicabo consequuntur unde a perspiciatis facilis animi expedita assumenda!',
-		status: 'current',
-		id: 3
-	},
-	4: {
-		title: 'задача',
-		description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium reiciendis sequi, accusamus amet rerum exercitationem, veritatis ratione fuga culpa similique deleniti explicabo consequuntur unde a perspiciatis facilis animi expedita assumenda!',
-		status: 'current',
-		id: 4
-	},
-	5: {
-		title: 'задача ',
-		description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium reiciendis sequi, accusamus amet rerum exercitationem, veritatis ratione fuga culpa similique deleniti explicabo consequuntur unde a perspiciatis facilis animi expedita assumenda!',
-		status: 'shedule',
-		id: 5
-	}
+
+Parse.initialize("8t5ZKASH24D5ML6z49AYtS9zUJRzwtRtQIL6IHkO", "6UVmjTt70CtVpH02CQw3VF7Mll9C99kKQ8hz43ji"); //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
+Parse.serverURL = "https://parseapi.back4app.com/";
+const Todo = Parse.Object.extend('todo');
+
+function getAllTodos() {
+
+	const allTodos = {};
+	const query = new Parse.Query(Todo);
+
+	query.find().then(todos => {
+		for (let todo of todos) {
+			allTodos[todo.id] = {
+				id: todo.id,
+				title: todo.get('title'),
+				description: todo.get('description'),
+				status: todo.get('status')
+			}
+		}
+	}).then(() => renderAllTodos(allTodos));
+
 }
 
-
-
-renderAllTodos(todosList);
+getAllTodos();
 
 document.querySelector('.addTodo').addEventListener('click', () => {
 	const modal = createModal(createFormAddTodo());
@@ -52,30 +35,41 @@ document.querySelector('.addTodo').addEventListener('click', () => {
 });
 
 function deleteTodo(id) {
-	delete todosList[id];
 	const todo = document.querySelector(`.todo[data-id="${id}"]`);
 	todo.parentElement.remove();
 }
 
-function toggleTodo(todoElement, section = 'current') {
-	const todoItem = todoElement.parentElement;
-	const id = todoElement.dataset.id;
-	const todoObj = todosList[id];
+function renderTodo(todoObj) {
+	const container = document.createElement('div');
+	container.classList.add('todos__item');
+	container.append(createTodoHtml(todoObj));
 
-	if (todoObj.status == 'current') {
-		const todos = document.querySelector('.shedule').firstElementChild;
-		todos.append(todoItem);
-		todoObj.status = 'shedule';
-	} else {
-		const todos = document.querySelector('.current').firstElementChild;
-		todos.append(todoItem);
-		todoObj.status = 'current';
+	const section = (todoObj.status == 'current') ?
+		document.querySelector('.current > .todos') :
+		document.querySelector('.shedule > .todos');
+
+	section.append(container);
+}
+
+function parseFromBack(fromBack) {
+	return {
+		status: fromBack.get('status'),
+		description: fromBack.get('description'),
+		title: fromBack.get('title'),
+		id: fromBack.id
 	}
 }
 
-function addTodo(todo) {
-	todosList[todo.id] = todo;
+function toggleTodo(todoElement) {
+	const todoItem = todoElement.parentElement;
+	const id = todoElement.dataset.id;
+	toggleStatus(id).then(todo => {
+		renderTodo(parseFromBack(todo));
+		todoItem.remove();
+	})
 }
+
+
 
 function getTodoFromForm() {
 	const formData = {};
@@ -103,15 +97,7 @@ function renderAllTodos(todosList) { // выводит все задачи
 	for (let id in todosList) {
 		const todo = todosList[id];
 
-		const container = document.createElement('div');
-		container.classList.add('todos__item');
-		container.append(createTodoHtml(todo));
-
-		const section = (todo.status == 'current') ?
-			document.querySelector('.current > .todos') :
-			document.querySelector('.shedule > .todos');
-
-		section.append(container);
+		renderTodo(todo);
 	}
 }
 
@@ -151,6 +137,9 @@ function createTodoHtml(todoObj) { // создаёт html задачи
 
 		const btnStop = document.createElement('button');
 		btnStop.innerHTML = 'остановть';
+		btnStop.addEventListener('click', (e) => {
+			toggleTodo(e.target.closest('.todo'));
+		});
 		buttons.push(btnStop);
 
 	} else if (todoObj.status == 'shedule') {
@@ -195,5 +184,4 @@ function hideFullDescription(event) { // скрывает полное опис�
 	event.target.style.height = '';
 }
 
-
-export {addTodo, createTodoHtml, getNewId}
+export {Todo, parseFromBack, createTodoHtml, getNewId, renderTodo}
