@@ -1,6 +1,6 @@
-import {closeModal} from './modal.js';
-import {createTodoHtml, getNewId, renderTodo, parseFromBack} from './index.js'
-import {asyncAddTodo} from './database.js'
+import {closeModal} from './modal.js'
+import {renderTodo} from './todoDom.js'
+import {asyncAddTodo, parseFromBack} from './database.js'
 
 function createFormAddTodo() {
 	const formDiv = document.createElement('div');
