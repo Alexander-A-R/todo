@@ -1,21 +1,23 @@
+$font_path: "../fonts";
+
 @font-face {
 	font-family: 'Rubik';
 	src: local('Rubik Light'),
 		 local('Rubik-Light'),
-		 url('../fonts/Rubik-Light.ttf');
+		 url("#{$font_path}/Rubik-Light.ttf");
 	font-weight: 300;
 }
 @font-face {
 	font-family: 'Rubik';
 	src: local('Rubik Regular'),
 		 local('Rubik-Regular'),
-		 url('../fonts/Rubik-Regular.ttf');
+		 url("#{$font_path}/Rubik-Regular.ttf");
 	font-weight: 400;
 }
 @font-face {
 	font-family: 'Rubik';
 	src: local('Rubik SemiBold'),
 		 local('Rubik-SemiBold'),
-		 url('../fonts/Rubik-SemiBold.ttf');
+		 url("#{$font_path}/Rubik-SemiBold.ttf");
 	font-weight: 600;
 }

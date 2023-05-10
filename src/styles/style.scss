@@ -1,5 +1,37 @@
 @import 'fonts.scss';
 
-.red {
-	color: red;
+$app_bg: #171717;
+$app_green: #7cebac;
+$main_font_size: 18px;
+
+body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	background-color: $app_bg;
+	color: $app_green;
+	font-family: 'Rubik';
+	font-weight: 300;
+	letter-spacing: 1px;
+	font-size: $main_font_size;
+}
+button {
+	border: 1px $app_green solid;
+	border-radius: 3px;
+	background-color: transparent;
+	color: $app_green;
+	font-family: 'Rubik';
+	font-size: 13px;
+	font-weight: 300;
+	letter-spacing: 1px;
+	padding: 4px 5px;
+	transition: all 0.2s linear;
+
+	&:hover {
+		color: #fff;
+		text-shadow: 0 0 1px #fff;
+		border-color: #fff;
+		box-shadow: 0px 0px 2px #fff;
+		background-color: rgba(26, 82, 63, 0.8);
+	}
 }
