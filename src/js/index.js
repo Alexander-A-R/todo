@@ -38,5 +38,3 @@ function toggleTodo(id) {
 }
 
 export {toggleTodo}
-
-

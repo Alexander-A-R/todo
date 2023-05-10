@@ -17,7 +17,13 @@ function createModal(contentElement) {
 	closeBtn.addEventListener('click', closeModal);
 	closeBtn.classList.add('modal__close', 'close-btn');
 
-	modalContent.append(contentElement);
+	if (typeof contentElement == 'string') {
+
+		modalContent.innerHTML = contentElement;
+
+	} else modalContent.append(contentElement);
+
+	
 	modalContent.append(closeBtn);
 	modalBody.append(modalContent);
 	modal.append(modalBody);

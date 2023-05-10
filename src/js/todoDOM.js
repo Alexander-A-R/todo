@@ -1,5 +1,8 @@
 import {toggleTodo} from './index.js'
 import {asyncDeleteTodo} from './database.js'
+import {createConfirmHtml} from './confirm.js'
+import {createModal} from './modal.js'
+import {closeModal} from './modal.js'
 
 function createTodoHtml(todoObj) { // создаёт html задачи
 	const todo = document.createElement('div');
@@ -17,9 +20,26 @@ function createTodoHtml(todoObj) { // создаёт html задачи
 		const todo = e.target.closest('.todo');
 		const id = todo.dataset.id;
 
-		asyncDeleteTodo(id).then( () => deleteTodoFromDom(id) );
+		const modal = createModal(createConfirmHtml());
+
+		document.body.append(modal);
+		document.body.style.overflow = 'hidden';
+
+		const yes = document.querySelector('.confirm__buttons').firstElementChild;
+		const no = document.querySelector('.confirm__buttons').lastElementChild;
+
+		yes.addEventListener('click', (e) => {
+			asyncDeleteTodo(id).then( () => {
+				deleteTodoFromDom(id)
+				closeModal();
+			} );
+		})
+
+		no.addEventListener('click', (e) => closeModal());
 
 	});
+
+
 	close.classList.add('todo__delete', 'close-btn');
 
 	const description = document.createElement('p');

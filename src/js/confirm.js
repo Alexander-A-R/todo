@@ -1,6 +1,5 @@
 function createConfirmHtml() {
-	return 
-		`<div class="confirm">
+	return `<div class="confirm">
 			<div class="confirm__container">
 				<h1 class="confirm__title">Удалить задачу?</h1>
 				<div class="confirm__buttons">
