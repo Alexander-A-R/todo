@@ -1,6 +1,6 @@
 import {closeModal} from './modal.js'
 import {renderTodo} from './todoDom.js'
-import {asyncAddTodo, parseFromBack} from './database.js'
+import {asyncAddTodo} from './database.js'
 
 function createFormAddTodo() {
 	const formDiv = document.createElement('div');
@@ -56,10 +56,14 @@ function createFormAddTodo() {
 
 	buttonAdd.addEventListener('click', () => {
 		const newTodoData = getTodoFromForm();
-		asyncAddTodo(newTodoData).then(todo => {
-			renderTodo(parseFromBack(todo));
+		newTodoData.status = 'shedule';
+
+		asyncAddTodo(newTodoData).then(data => {
+			newTodoData.objectId = data.objectId;
+			renderTodo(newTodoData);
+			closeModal();
 		})
-		closeModal();
+		
 	})
 
 	const buttonCancel = document.createElement('button');
@@ -82,10 +86,8 @@ function createFormAddTodo() {
 }
 
 function getTodoFromForm() {
-	const formData = {
-		status: 'shedule'
-	}
 
+	const formData = {};	
 	const form = document.querySelector('.form').firstElementChild;
 	const formElements = form.elements;
 	

@@ -2,7 +2,7 @@ import '../styles/styles.css'
 import '../styles/style.scss'
 import {createModal} from './modal.js'
 import {createFormAddTodo} from './form.js'
-import {toggleStatus, getAllTodos, parseFromBack} from './database.js'
+import {asyncSetStatus, asyncGetTodo, asyncGetAllTodos} from './database.js'
 import {renderAllTodos, renderTodo} from './todoDom.js'
 
 
@@ -16,19 +16,27 @@ document.querySelector('.addTodo').addEventListener('click', () => {
 
 
 function showAllTodos() {
-	getAllTodos().then((todos) => renderAllTodos(todos));
+	asyncGetAllTodos().then((todos) => renderAllTodos(todos));
 }
 
 function toggleTodo(id) {
 
-	const todoItem = document.querySelector(`.todo[data-id=${id}]`).parentElement;
+	const todoElement = document.querySelector(`.todo[data-id="${id}"]`);
+	const todoItem = todoElement.parentElement;
 
-	toggleStatus(id).then(todo => {
-		renderTodo(parseFromBack(todo));
-		todoItem.remove();
+	const status = todoElement.dataset.status == 'current' ? 'shedule' : 'current';
+
+	asyncSetStatus(id, status)
+		.then(date => {
+			asyncGetTodo(id)
+				.then(todo => {
+					renderTodo(todo);
+					todoItem.remove();
+		})
 	})
 
 }
 
-
 export {toggleTodo}
+
+

@@ -2,56 +2,78 @@ Parse.initialize("8t5ZKASH24D5ML6z49AYtS9zUJRzwtRtQIL6IHkO", "6UVmjTt70CtVpH02CQ
 Parse.serverURL = "https://parseapi.back4app.com/";
 const Todo = Parse.Object.extend('todo');
 
-function toggleStatus(id) {
-	const query = new Parse.Query(Todo);
-
-	query.equalTo('objectId', id);
-
-	return query.first().then(todo => {
-		const status = todo.get('status') == 'shedule' ? 'current' : 'shedule';
-
-		todo.set('status', status);
-		return todo.save();
-		
-	}).catch(err => console.log(err));
-}
 
 function asyncAddTodo(todoFromForm) {
-	const todo = new Todo();
 
-	todo.set('title', todoFromForm.title);
-	todo.set('description', todoFromForm.description);
-	todo.set('status', todoFromForm.status);
-
-	return todo.save();
-}
-
-function getAllTodos() {
-
-	const allTodos = {};
-	const query = new Parse.Query(Todo);
-
-	return query.find().then(todos => {
-		for (let todo of todos) {
-			allTodos[todo.id] = {
-				id: todo.id,
-				title: todo.get('title'),
-				description: todo.get('description'),
-				status: todo.get('status')
-			}
-		}
-		return allTodos;
+	return fetch('https://parseapi.back4app.com/classes/todo', {
+		method: 'post',
+		headers: {
+			'X-Parse-Application-Id': '8t5ZKASH24D5ML6z49AYtS9zUJRzwtRtQIL6IHkO',
+			'X-Parse-REST-API-Key' : 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(todoFromForm)
 	})
+		.then(response => response.json())
+		.catch(err => console.log(err));
+		
+}
+
+
+
+function asyncGetTodo(id) {
+
+	return fetch(`https://parseapi.back4app.com/classes/todo/${id}`, {
+		method: 'get',
+		headers: {
+			'X-Parse-Application-Id': '8t5ZKASH24D5ML6z49AYtS9zUJRzwtRtQIL6IHkO',
+			'X-Parse-REST-API-Key' : 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5'
+		}
+	})
+		.then(response => response.json());
 
 }
 
-function parseFromBack(fromBack) {
-	return {
-		status: fromBack.get('status'),
-		description: fromBack.get('description'),
-		title: fromBack.get('title'),
-		id: fromBack.id
-	}
+
+function asyncGetAllTodos() {
+
+	return fetch('https://parseapi.back4app.com/classes/todo', {
+		method: 'get',
+		headers: {
+			'X-Parse-Application-Id': '8t5ZKASH24D5ML6z49AYtS9zUJRzwtRtQIL6IHkO',
+			'X-Parse-REST-API-Key' : 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5'
+		}
+	})
+		.then(response => response.json())
+		.then(data => data.results);
+
 }
 
-export {toggleStatus, asyncAddTodo, getAllTodos, parseFromBack}
+function asyncDeleteTodo(id) {
+	return fetch(`https://parseapi.back4app.com/classes/todo/${id}`, {
+		method: 'delete',
+		headers: {
+			'X-Parse-Application-Id': '8t5ZKASH24D5ML6z49AYtS9zUJRzwtRtQIL6IHkO',
+			'X-Parse-REST-API-Key' : 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5'
+		}
+	})
+		.then(response => response.json());
+}
+
+
+function asyncSetStatus(id, status) {
+
+	return fetch(`https://parseapi.back4app.com/classes/todo/${id}`, {
+		method: 'put',
+		headers: {
+			'X-Parse-Application-Id': '8t5ZKASH24D5ML6z49AYtS9zUJRzwtRtQIL6IHkO',
+			'X-Parse-REST-API-Key' : 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({status})
+	});
+
+}
+
+
+export {asyncAddTodo, asyncGetTodo, asyncGetAllTodos, asyncSetStatus, asyncDeleteTodo}

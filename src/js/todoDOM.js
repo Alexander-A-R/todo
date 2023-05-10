@@ -1,8 +1,10 @@
 import {toggleTodo} from './index.js'
+import {asyncDeleteTodo} from './database.js'
 
 function createTodoHtml(todoObj) { // создаёт html задачи
 	const todo = document.createElement('div');
-	todo.dataset.id = todoObj.id;
+	todo.dataset.id = todoObj.objectId;
+	todo.dataset.status = todoObj.status;
 	todo.classList.add('todo');
 
 	const title = document.createElement('h1');
@@ -14,7 +16,9 @@ function createTodoHtml(todoObj) { // создаёт html задачи
 		
 		const todo = e.target.closest('.todo');
 		const id = todo.dataset.id;
-		deleteTodo(id);
+
+		asyncDeleteTodo(id).then( () => deleteTodoFromDom(id) );
+
 	});
 	close.classList.add('todo__delete', 'close-btn');
 
@@ -80,14 +84,10 @@ function renderTodo(todoObj) {
 }
 
 function renderAllTodos(todosList) { // выводит все задачи
-	for (let id in todosList) {
-		const todo = todosList[id];
-
-		renderTodo(todo);
-	}
+	todosList.forEach(todo => renderTodo(todo));
 }
 
-function deleteTodo(id) {
+function deleteTodoFromDom(id) {
 	const todo = document.querySelector(`.todo[data-id="${id}"]`);
 	todo.parentElement.remove();
 }
@@ -96,12 +96,12 @@ function deleteTodo(id) {
 
 function showFullDescription(event) { // показывает полное описание, если оно не влазиет
 	event.target.style.height = 'auto';
-	const height = getComputedStyle(event.target).height;
+	const height = event.target.offsetHeight;
 	event.target.style.height = '';
 
-	if (parseInt(height) > 40) {
+	if (height > 40) {
 		requestAnimationFrame(() => {
-			event.target.style.height = height;
+			event.target.style.height = height + 'px';
 		})
 	}
 }
