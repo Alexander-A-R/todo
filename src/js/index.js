@@ -1,5 +1,4 @@
-import '../styles/styles.css'
-import '../styles/style.scss'
+import '../styles/styles.scss'
 import {createModal} from './modal.js'
 import {createFormAddTodo} from './form.js'
 import {asyncSetStatus, asyncGetTodo, asyncGetAllTodos} from './database.js'
@@ -12,6 +11,7 @@ showAllTodos();
 document.querySelector('.addTodo').addEventListener('click', () => {
 	const modal = createModal(createFormAddTodo());
 	document.body.append(modal);
+	document.body.style.overflow = 'hidden';
 });
 
 

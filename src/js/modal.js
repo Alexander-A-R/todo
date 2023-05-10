@@ -28,6 +28,7 @@ function createModal(contentElement) {
 function closeModal() {
 	const modal = document.querySelector('.modal');
 	modal.remove();
+	document.body.style.overflow = '';
 }
 
 export {createModal, closeModal};

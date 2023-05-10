@@ -1,21 +1,64 @@
+@import 'fonts.scss';
+@import 'declarations.scss';
 
+
+html {
+	font-family: 'Rubik';
+	font-size: $main_font_size;
+	letter-spacing: 0.07rem;
+	font-weight: 300;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	background-color: $app_bg;
+	color: $app_green;
+}
 
 h1 {
 	margin: 0;
 }
+
+button {
+	border: 1px $app_green solid;
+	border-radius: 3px;
+	background-color: transparent;
+	color: $app_green;
+	font-family: inherit;
+	font-size: 0.7rem;
+	font-weight: inherit;
+	letter-spacing: inherit;
+	padding: 4px 5px;
+	transition: all 0.2s linear;
+
+	&:hover {
+		color: white;
+		text-shadow: 0 0 1px white;
+		border-color: white;
+		box-shadow: 0px 0px 2px white;
+		background-color: $hover_bg;
+	}
+}
+
+//------------------Секция задач-------------------
 
 .todos{
 	min-height: 100px;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	border: 1px #7cebac solid;
+	justify-content: space-around;
+	border: 1px $app_green solid;
 	position: relative;
-	padding: 10px;
 }
+
 .todos__item {
-	padding: 30px;
+	margin: 20px 0;
+	padding: 0 20px;
 }
+
 .todos__title {
 	display: inline-block;
 	padding: 0 7px;
@@ -23,26 +66,29 @@ h1 {
 	top: -9px;
 	left: 50%;
 	transform: translateX(-50%);
-	background-color: #171717;
-	font-size: 13px;
+	background-color: $app_bg;
+	font-size: 0.7rem;
 	text-transform: lowercase;
 }
+
+//-------------------Элемент задачи------------------
+
 .todo {
 	position: relative;
 	height: 154px;
 	width: 400px;
 	padding: 15px;
-	border: 1px #7cebac solid;
+	border: 1px $app_green solid;
 	border-radius: 3px;
-	box-shadow: 0 0 5px rgba(124, 235, 172, 0.9);
+	box-shadow: 0 0 5px $green_shadow;
 	box-sizing: border-box;	
-	background-color: #262424;
+	background-color: $todo_bg;
 }
 
 .todo__title {
 	text-align: center;
-	font-size: 18px;
-	font-weight: 300;
+	font-size: 1rem;
+	font-weight: 400;
 }
 .todo__delete {
 	position: absolute;
@@ -64,23 +110,23 @@ h1 {
 }
 .todo__description::before {
 	content: 'Описание: ';
-	color: #f54e4e;
+	color: $app_red;
 
 }
 .todo__description:hover {
 	padding: 10px 15px;
 	left: 0px;
 	top: -10px;
-	color: #fff;
-	border-color: #fff;
-	background-color: rgba(26, 82, 63, 0.8);
-	text-shadow: 0 0 1px #fff;
-	box-shadow: 0px 0px 2px #fff;
+	color: white;
+	border-color: white;
+	background-color: $hover_bg;
+	text-shadow: 0 0 1px white;
+	box-shadow: 0px 0px 2px white;
 	z-index: 10;
 	
 }
 .todo__description:hover::before {
-	text-shadow: 0 0 3px #f54e4e;
+	text-shadow: 0 0 3px $app_red;
 }
 
 .todo__control {
@@ -94,10 +140,6 @@ h1 {
 	width: 120px;
 }
 
-
-.hidden {
-	overflow: hidden;
-}
 .current {
 	padding: 10px;
 }
@@ -109,13 +151,15 @@ h1 {
 	background-color: #706e69;
 }
 
+//---------------Модальное окно------------------
+
 .modal {
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	background-color: rgba(8, 7, 7, 0.9);
+	background-color: $modal_bg;
 	z-index: 99;
 	animation: open-modal 0.5s ease-out;
 }
@@ -136,9 +180,8 @@ h1 {
 }
 .modal__content {
 	position: relative;
-	min-width: 500px;
-	background-color: rgba(107, 107, 107, 0.5);;
-	border-radius: 1px;
+	width: 500px;
+	background-color: $modal_content_bg;
 	animation: open-content 0.5s ease-out;
 }
 @keyframes open-content{
@@ -156,12 +199,16 @@ h1 {
 	top: 5px;
 	right: 5px;
 }
+
+
+//---------------Форма создания задачи---------------
+
 .form {
 	width: 70%;
 	margin: 50px auto;
 }
 .form__table {
-	margin: 0 auto 30px;
+	margin-bottom: 30px;
 	width: 100%;
 }
 .form__table tr {
@@ -174,32 +221,30 @@ h1 {
 }
 
 .form label {
-	font-size: 12px;
+	font-size: 0.68rem;
 	padding-right: 5px;
 }
 .form input {
-	border: 1px transparent solid;
 	width: 170px;
-	font-size: 15px;
+	font-size: 0.8rem;
 	letter-spacing: 0.1em;
+	border: 1px transparent solid;
 	border-radius: 3px;
 }
 .form input:focus {
-	border: 1px #18ba4e solid;
-	outline: 0;
+	@include input_focus($input_focus_clr);
 }
 .form textarea {
 	width: 100%;
 	height: 70px;
-	font-size: 15px;
+	font-size: 0.8rem;
 	letter-spacing: 0.1em;
 	border: 1px transparent solid;
 	border-radius: 3px;
 	resize: none;
 }
 .form textarea:focus {
-	border: 1px #18ba4e solid;
-	outline: 0;
+	@include input_focus($input_focus_clr);
 }
 .form__control {
 	display: flex;
@@ -210,16 +255,16 @@ h1 {
 	width: 130px;
 }
 
-
+//------------------Кнопка "закрыть"--------------
 
 .close-btn {
 	height: 23px;
 	width: 23px;
-	color: #f54e4e;
+	color: $app_red;
 }
 .close-btn::after {
 	content: 'X';
-	color: #f54e4e;
+	color: $app_red;
 	position: relative;
 	left: 0.5px;
 	top: -2px;
@@ -230,5 +275,28 @@ h1 {
 }
 .close-btn:hover {
 	background-color: transparent;
-	text-shadow: 0 0 3px #f54e4e;
+	text-shadow: 0 0 3px $app_red;
+}
+
+//----------Подтверждение удаления задачи----------
+
+.confirm {
+	border: 1px $app_green solid;
+	text-align: center;
+}
+.confirm__container {
+	width: 70%;
+	margin: 0 auto;
+}
+.confirm__title {
+	font-size: 1rem;
+	font-weight: 400;
+	margin: 30px 0;
+}
+.confirm__buttons {
+	margin: 30px 0;
+}
+.confirm__btn {
+	width: 90px;
+	margin: 0 10px;
 }

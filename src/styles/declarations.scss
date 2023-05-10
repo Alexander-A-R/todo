@@ -1,0 +1,22 @@
+$main_font_size: 18px;
+
+
+$app_bg: #171717;
+$app_green: #7cebac;
+$app_red: #f54e4e;
+$hover_bg: rgba(26, 82, 63, 0.8);
+$todo_bg: #262424;
+$green_shadow: rgba(124, 235, 172, 0.9);
+
+
+
+$modal_bg: rgba(8, 7, 7, 0.9);
+$modal_content_bg: rgba(107, 107, 107, 0.5);
+
+$input_focus_clr: #18ba4e;
+
+
+@mixin input_focus($clr) {
+	border-color: $clr;
+	outline: 0;
+}
