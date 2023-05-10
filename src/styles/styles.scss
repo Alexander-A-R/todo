@@ -47,16 +47,16 @@ button {
 .todos{
 	min-height: 100px;
 	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
+	flex-direction: column;
+	align-items: flex-start;
 	justify-content: space-around;
 	border: 1px $app_green solid;
 	position: relative;
 }
 
 .todos__item {
-	margin: 20px 0;
-	padding: 0 20px;
+	width: 100%;
+	margin: 10px 0;
 }
 
 .todos__title {
@@ -74,10 +74,11 @@ button {
 //-------------------Элемент задачи------------------
 
 .todo {
-	position: relative;
-	height: 154px;
-	width: 400px;
-	padding: 15px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px;
+	margin: 10px;
 	border: 1px $app_green solid;
 	border-radius: 3px;
 	box-shadow: 0 0 5px $green_shadow;
@@ -96,6 +97,7 @@ button {
 	top: 5px;
 }
 .todo__description {
+	display: none;
 	position: relative;
 	left: 15px;
 	top: 0px;
@@ -128,16 +130,17 @@ button {
 .todo__description:hover::before {
 	text-shadow: 0 0 3px $app_red;
 }
-
+.todo__icon {
+	border-radius: 50%;
+	width: 15px;
+	height: 15px;
+	background-color: $app_green;
+}
 .todo__control {
-	display: flex;
-	justify-content: space-around;
-	width: calc(100% - 30px);
-	position: absolute;
-	bottom: 15px;
+	
 }
 .todo__button {
-	width: 120px;
+	width: 30px;
 }
 
 .current {
