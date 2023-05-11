@@ -2,7 +2,7 @@ import '../styles/styles.scss'
 import {createModal} from './modal.js'
 import {createFormAddTodo} from './form.js'
 import {asyncSetStatus, asyncGetTodo, asyncGetAllTodos} from './database.js'
-import {renderAllTodos, renderTodo} from './todoDom.js'
+import {renderAllTodos, renderAndInitTodo} from './todoDom.js'
 
 
 showAllTodos();

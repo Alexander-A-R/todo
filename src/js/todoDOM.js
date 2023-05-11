@@ -4,7 +4,7 @@ import {createConfirmHtml} from './confirm.js'
 import {createModal} from './modal.js'
 import {closeModal} from './modal.js'
 
-function createTodoHtml(todoObj) { // создаёт html задачи
+/*function createTodoHtml(todoObj) { // создаёт html задачи
 	const todo = document.createElement('div');
 	todo.dataset.id = todoObj.objectId;
 	todo.dataset.status = todoObj.status;
@@ -13,6 +13,10 @@ function createTodoHtml(todoObj) { // создаёт html задачи
 	const title = document.createElement('h1');
 	title.classList.add('todo__title');
 	title.innerHTML = todoObj.title;
+
+	const date = document.createElement('span');
+	date.classList.add('todo__date');
+	date.innerHTML = parseDate(todoObj.createdAt);
 
 	const close = document.createElement('button');
 	close.addEventListener('click', (e) => {
@@ -84,27 +88,82 @@ function createTodoHtml(todoObj) { // создаёт html задачи
 	});
 
 	todo.append(title);
+	todo.append(date);
 	todo.append(close);
 	todo.append(description);
 	todo.append(control);
 
 	return todo;
+}*/
+
+function createTodoHtml() {
+	return `<div class="todo">
+					<div class="todo__icon"></div>
+					<span class="todo__title"></span>
+					<span class="todo__date"></span>
+					<div class="todo__control">
+						<button class="todo__button">...</button>
+						<button class="todo__button">||</button>
+						<button class="todo__button todo__button_close">X</button>
+					</div>
+				</div>`
 }
 
-function renderTodo(todoObj) {
+//---------------------добавление элемента задачи и инициализация-----------
+
+function renderAndInitTodo(todoObj) {
 	const container = document.createElement('div');
 	container.classList.add('todos__item');
-	container.append(createTodoHtml(todoObj));
+	container.innerHTML = (createTodoHtml());
 
 	const section = (todoObj.status == 'current') ?
 		document.querySelector('.current > .todos') :
 		document.querySelector('.shedule > .todos');
 
 	section.append(container);
+
+	const todo = container.querySelector('.todo');
+	todo.dataset.id = todoObj.objectId;
+	todo.dataset.status = todoObj.status;
+
+	const title = todo.querySelector('.todo__title');
+	title.innerHTML = todoObj.title;
+
+	const date = todo.querySelector('.todo__date');
+	date.innerHTML = parseDate(todoObj.createdAt);
+
+	const datailsBtn = todo.querySelector('.todo__button:first-child');
+	const toggleBtn = todo.querySelector('.todo__control').children[1];
+	const deleteBtn = todo.querySelector('.todo__button:last-child');
+
+	deleteBtn.addEventListener('click', (e) => {
+		const todo = e.target.closest('.todo');
+		const id = todo.dataset.id;
+
+		const modal = createModal(createConfirmHtml());
+
+		document.body.append(modal);
+		document.body.style.overflow = 'hidden';
+
+		const yes = document.querySelector('.confirm__buttons').firstElementChild;
+		const no = document.querySelector('.confirm__buttons').lastElementChild;
+
+		yes.addEventListener('click', (e) => {
+			asyncDeleteTodo(id).then( () => {
+				deleteTodoFromDom(id)
+				closeModal();
+			} );
+		})
+
+		no.addEventListener('click', (e) => closeModal());
+	})
+
 }
 
 function renderAllTodos(todosList) { // выводит все задачи
-	todosList.forEach(todo => renderTodo(todo));
+	todosList.forEach(todo => {
+		renderAndInitTodo(todo);
+	});
 }
 
 function deleteTodoFromDom(id) {
@@ -130,4 +189,11 @@ function hideFullDescription(event) { // скрывает полное опис�
 	event.target.style.height = '';
 }
 
-export {renderTodo, renderAllTodos, createTodoHtml}
+function parseDate(dateFromDataBase) {
+	const timestamp = Date.parse(dateFromDataBase);
+	const date = new Date(timestamp);
+
+	return `${date.getDay()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
+}
+
+export {renderAndInitTodo, renderAllTodos, createTodoHtml}

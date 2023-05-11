@@ -77,6 +77,7 @@ button {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	min-width: 600px;
 	padding: 10px;
 	margin: 10px;
 	border: 1px $app_green solid;
@@ -84,13 +85,25 @@ button {
 	box-shadow: 0 0 5px $green_shadow;
 	box-sizing: border-box;	
 	background-color: $todo_bg;
+	font-size: 0.7rem;
 }
 
 .todo__title {
 	text-align: center;
-	font-size: 1rem;
 	font-weight: 400;
+	width: 35%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
+.todo__date {
+	white-space: nowrap;
+	&:before {
+		content: 'дата создания: ';
+		color: $app_red;
+	}
+}
+
 .todo__delete {
 	position: absolute;
 	right: 5px;
@@ -135,12 +148,21 @@ button {
 	width: 15px;
 	height: 15px;
 	background-color: $app_green;
+	margin-left: 10px;
 }
 .todo__control {
-	
+	white-space: nowrap;
 }
 .todo__button {
-	width: 30px;
+	width: 23px;
+	height: 23px;
+}
+.todo__button_close {
+	color: $app_red;
+	&:hover {
+		color: red;
+		background-color: transparent;
+	}
 }
 
 .current {

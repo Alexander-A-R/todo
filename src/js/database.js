@@ -1,6 +1,3 @@
-Parse.initialize("8t5ZKASH24D5ML6z49AYtS9zUJRzwtRtQIL6IHkO", "6UVmjTt70CtVpH02CQw3VF7Mll9C99kKQ8hz43ji"); //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
-Parse.serverURL = "https://parseapi.back4app.com/";
-const Todo = Parse.Object.extend('todo');
 
 
 function asyncAddTodo(todoFromForm) {

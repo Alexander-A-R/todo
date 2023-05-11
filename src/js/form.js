@@ -1,5 +1,5 @@
 import {closeModal} from './modal.js'
-import {renderTodo} from './todoDom.js'
+import {renderAndInitTodo} from './todoDom.js'
 import {asyncAddTodo} from './database.js'
 
 function createFormAddTodo() {
@@ -19,7 +19,7 @@ function createFormAddTodo() {
 	inputTitle.type = 'text';
 	inputTitle.name = 'title';
 	inputTitle.id = 'title';
-	inputTitle.maxlength = 20;
+	inputTitle.maxLength = 20;
 	const tdInput = document.createElement('td');
 	tdInput.append(inputTitle);
 	trTitle.append(tdLabel);
@@ -60,7 +60,8 @@ function createFormAddTodo() {
 
 		asyncAddTodo(newTodoData).then(data => {
 			newTodoData.objectId = data.objectId;
-			renderTodo(newTodoData);
+			newTodoData.createdAt = data.createdAt;
+			renderAndInitTodo(newTodoData);
 			closeModal();
 		})
 		
@@ -98,5 +99,6 @@ function getTodoFromForm() {
 	
 	return formData;
 }
+
 
 export {createFormAddTodo};
