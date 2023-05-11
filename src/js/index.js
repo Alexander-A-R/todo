@@ -30,7 +30,7 @@ function toggleTodo(id) {
 		.then(date => {
 			asyncGetTodo(id)
 				.then(todo => {
-					renderTodo(todo);
+					renderAndInitTodo(todo);
 					todoItem.remove();
 		})
 	})

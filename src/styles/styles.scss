@@ -86,6 +86,15 @@ button {
 	box-sizing: border-box;	
 	background-color: $todo_bg;
 	font-size: 0.7rem;
+	position: relative;
+}
+
+.todo__icon {
+	border-radius: 50%;
+	width: 15px;
+	height: 15px;
+	background-color: $app_green;
+	margin-left: 10px;
 }
 
 .todo__title {
@@ -104,52 +113,6 @@ button {
 	}
 }
 
-.todo__delete {
-	position: absolute;
-	right: 5px;
-	top: 5px;
-}
-.todo__description {
-	display: none;
-	position: relative;
-	left: 15px;
-	top: 0px;
-	box-sizing: content-box;
-	width: calc(100% - 30px);
-	height: 40px;
-	margin: 15px 0 20px;
-	font-size: 12px;
-	overflow: hidden;
-	transition: all 0.25s linear;
-	overflow-wrap: break-word;
-}
-.todo__description::before {
-	content: 'Описание: ';
-	color: $app_red;
-
-}
-.todo__description:hover {
-	padding: 10px 15px;
-	left: 0px;
-	top: -10px;
-	color: white;
-	border-color: white;
-	background-color: $hover_bg;
-	text-shadow: 0 0 1px white;
-	box-shadow: 0px 0px 2px white;
-	z-index: 10;
-	
-}
-.todo__description:hover::before {
-	text-shadow: 0 0 3px $app_red;
-}
-.todo__icon {
-	border-radius: 50%;
-	width: 15px;
-	height: 15px;
-	background-color: $app_green;
-	margin-left: 10px;
-}
 .todo__control {
 	white-space: nowrap;
 }
@@ -164,6 +127,45 @@ button {
 		background-color: transparent;
 	}
 }
+
+.todo__details {
+	position: absolute;
+	top: 40px;
+	left: 1.5%;
+	width: 97%;
+	height: auto;
+	padding: 10px 0 20px;
+	border: 1px $app_green solid;
+	background-color: $hover_bg;
+	z-index: 5;
+}
+
+.todo__details-item {
+	position: relative;
+	width: 80%;
+	margin: 20px auto 0;
+	&:before {
+		content: '';
+		color: $app_red;
+		position: absolute;
+		top: -18px;
+		left: 50%;
+		transform: translateX(-50%);
+		font-weight: 600;
+	}
+}
+.todo__details-item_description {
+	&:before {
+		content: 'Описание';
+	}
+}
+.todo__details-item_comments {
+	&:before {
+		content: 'Комментарии';
+	}
+}
+
+//----------------Секции------------------
 
 .current {
 	padding: 10px;
