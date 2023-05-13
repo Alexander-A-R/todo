@@ -1,6 +1,7 @@
 @import 'fonts.scss';
 @import 'declarations.scss';
 @import 'error.scss';
+@import 'preloader.scss';
 
 
 html {
@@ -194,12 +195,12 @@ button {
 
 //----------------Секции------------------
 
-.current {
+.section {
+	max-width: 800px;
 	padding: 10px;
+	margin: 0 auto;
 }
-.shedule {
-	padding: 10px;
-}
+
 .header {
 	padding: 10px;
 	background-color: #706e69;
@@ -215,7 +216,7 @@ button {
 	height: 100vh;
 	background-color: $modal_bg;
 	z-index: 99;
-	animation: open-modal 0.5s ease-out;
+	animation: open-modal 0.3s ease-out;
 }
 @keyframes open-modal{
 	from {
@@ -236,7 +237,7 @@ button {
 	position: relative;
 	width: 500px;
 	background-color: $modal_content_bg;
-	animation: open-content 0.5s ease-out;
+	animation: open-content 0.3s ease-out;
 }
 @keyframes open-content{
 	from {

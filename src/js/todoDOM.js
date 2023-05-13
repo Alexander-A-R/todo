@@ -4,6 +4,7 @@ import {createConfirmHtml} from './confirm.js'
 import {createModal} from './modal.js'
 import {closeModal} from './modal.js'
 import {errorMessage} from './error.js'
+import {showPreloader, hidePreloader} from './preloader.js'
 
 
 
@@ -28,7 +29,7 @@ function createTodoHtml() {
 
 //---------------------добавление элемента задачи и инициализация-----------
 
-function renderAndInitTodo(todoObj) {
+function renderAndInitTodo({objectId, title, status, createdAt}) {
 
 //----------------------добавление в документ----------------------
 
@@ -37,41 +38,64 @@ function renderAndInitTodo(todoObj) {
 	container.innerHTML = (createTodoHtml());			// createTodoHtml() - возвращает HTML задачи в виде строки
 
 
-	const section = (todoObj.status == 'current') ?		// выбор секции в зависимости от статуса состояния
+	const section = (status == 'current') ?		// выбор секции в зависимости от статуса состояния
 		document.querySelector('.current > .todos') :
 		document.querySelector('.shedule > .todos');
 
 	section.append(container);							//	вставка блока задачи в секцию
 
+
 //---------------------добавление аттрибутов-----------------------
 
 	const todo = container.querySelector('.todo');
-	todo.dataset.id = todoObj.objectId;
-	todo.dataset.status = todoObj.status;
+	todo.dataset.id = objectId;
+	todo.dataset.status = status;
 
 //---------------------вставка содержания полей--------------------
 
-	if (todoObj.status == 'shedule') {
+	if (status == 'shedule') {
 		const icon = todo.querySelector('.todo__icon');
 		icon.classList.add('todo__icon_yellow');
 	}
 
-	const title = todo.querySelector('.todo__title');		//	название
-	title.innerHTML = todoObj.title;
+	const titleElement = todo.querySelector('.todo__title');		//	название
+	titleElement.innerHTML = title;
 
 	const date = todo.querySelector('.todo__date');			//	дата
-	date.innerHTML = parseDate(todoObj.createdAt);
+	date.innerHTML = parseDate(createdAt);
 
-	const toggleBtn = todo.querySelector('.todo__control').children[1];		//	кнопка переключения статуса
-	toggleBtn.innerHTML = todoObj.status == 'current' ? '||' : '>';
+//-----------------------определение контрольной панели-------------------------
+
+	//---------------------добавление кнопки "завершить задачу"-----------------
+
+	let detailsBtn;
+	let toggleBtn;
+
+	const controlPanel = todo.querySelector('.todo__control');
+
+	const deleteBtn = controlPanel.lastElementChild;
+
+	if (status == 'current') {
+		const completeBtn = document.createElement('button');
+		completeBtn.classList.add('todo__button', 'todo__button_complete');
+		completeBtn.innerText = '=>'
+		todo.querySelector('.todo__control').prepend(completeBtn);
+		
+		detailsBtn = controlPanel.children[1];
+		toggleBtn = controlPanel.children[2];
+
+	} else {
+		detailsBtn = controlPanel.children[0];
+		toggleBtn = controlPanel.children[1];
+	}
+
+	toggleBtn.innerHTML = status == 'current' ? '||' : '>';
+
 
 //---------------------добавление обработчиков событий---------------------
 
 
 	const transitionEndHandler = () => todo.style.removeProperty('z-index');
-
-	const detailsBtn = todo.querySelector('.todo__button:first-child');
-	const deleteBtn = todo.querySelector('.todo__button.todo__button_close');
 
 	detailsBtn.addEventListener('click', () => {
 		todo.querySelector('.todo__details').classList.toggle('todo__details_show');
@@ -103,6 +127,7 @@ function renderAndInitTodo(todoObj) {
 
 		yes.addEventListener('click', async () => {
 			try {
+				showPreloader();
 				await asyncDeleteTodo(id);
 				deleteTodoFromDom(id);
 			} catch(err) {
@@ -110,6 +135,7 @@ function renderAndInitTodo(todoObj) {
 				console.error(err);
 			} finally {
 				closeModal();
+				hidePreloader();
 			}
 		})
 
@@ -135,8 +161,13 @@ function deleteTodoFromDom(id) {
 function parseDate(dateFromDataBase) {
 	const timestamp = Date.parse(dateFromDataBase);
 	const date = new Date(timestamp);
+	const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+	const month = date.getMonth() < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+	const hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+	const minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
 
-	return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
+
+	return `${day}.${month}.${date.getFullYear()} ${hours}:${minutes}`
 }
 
 export {renderAndInitTodo, renderAllTodos, createTodoHtml}

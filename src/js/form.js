@@ -2,6 +2,7 @@ import {closeModal} from './modal.js'
 import {renderAndInitTodo} from './todoDom.js'
 import {asyncAddTodo} from './database.js'
 import {errorMessage} from './error.js'
+import {showPreloader, hidePreloader} from './preloader.js'
 
 function createFormAddTodo() {
 	const formDiv = document.createElement('div');
@@ -61,6 +62,7 @@ function createFormAddTodo() {
 
 		try {
 
+			showPreloader('black');
 			const response = await asyncAddTodo(newTodoData);
 			newTodoData.objectId = response.objectId;
 			newTodoData.createdAt = response.createdAt;
@@ -71,6 +73,7 @@ function createFormAddTodo() {
 			console.error(err);
 		} finally {
 			closeModal();
+			hidePreloader();
 		}
 		
 	})
