@@ -1,0 +1,11 @@
+.error {
+	text-align: center;
+	padding: 20px 0;
+	&__text {
+		color: $app_red;
+		margin-bottom: 30px;
+	}
+	&__ok {
+		width: 90px;
+	}
+}

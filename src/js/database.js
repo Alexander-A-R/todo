@@ -1,74 +1,98 @@
 
-
-function asyncAddTodo(todoFromForm) {
-
-	return fetch('https://parseapi.back4app.com/classes/todo', {
+async function asyncAddTodo(todoFromForm) {
+	
+	const response = await fetch('https://parseapi.back4app.com/classes/todo', {
 		method: 'post',
 		headers: {
 			'X-Parse-Application-Id': '8t5ZKASH24D5ML6z49AYtS9zUJRzwtRtQIL6IHkO',
-			'X-Parse-REST-API-Key' : 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5',
+			'X-Parse-REST-API-Key': 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5',
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify(todoFromForm)
 	})
-		.then(response => response.json())
-		.catch(err => console.log(err));
-		
+
+	if (!response.ok) {
+		const error = new Error(`status: ${response.status}`)
+		error.name = 'ServerCommunicationError';
+		throw error;
+	} else return response.json();
+
 }
 
 
 
-function asyncGetTodo(id) {
+async function asyncGetTodo(id) {
 
-	return fetch(`https://parseapi.back4app.com/classes/todo/${id}`, {
+	const response = await fetch(`https://parseapi.back4app.com/classes/todo/${id}`, {
 		method: 'get',
 		headers: {
 			'X-Parse-Application-Id': '8t5ZKASH24D5ML6z49AYtS9zUJRzwtRtQIL6IHkO',
-			'X-Parse-REST-API-Key' : 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5'
+			'X-Parse-REST-API-Key': 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5'
 		}
 	})
-		.then(response => response.json());
+
+	if (!response.ok) {
+		const error = new Error(`status: ${response.status}`)
+		error.name = 'ServerCommunicationError';
+		throw error;
+	} else return response.json();
 
 }
 
 
-function asyncGetAllTodos() {
+async function asyncGetAllTodos() {
 
-	return fetch('https://parseapi.back4app.com/classes/todo', {
+	const response = await fetch('https://parseapi.back4app.com/classes/todo', {
 		method: 'get',
 		headers: {
 			'X-Parse-Application-Id': '8t5ZKASH24D5ML6z49AYtS9zUJRzwtRtQIL6IHkO',
-			'X-Parse-REST-API-Key' : 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5'
+			'X-Parse-REST-API-Key': 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5'
 		}
 	})
-		.then(response => response.json())
-		.then(data => data.results);
+		if (!response.ok) {
+		const error = new Error(`status: ${response.status}`)
+		error.name = 'ServerCommunicationError';
+		throw error;
+	} else {
+		const data = await response.json()
+		return data.results;
+	}
 
 }
 
-function asyncDeleteTodo(id) {
-	return fetch(`https://parseapi.back4app.com/classes/todo/${id}`, {
+async function asyncDeleteTodo(id) {
+	const response = await fetch(`https://parseapi.back4app.com/classes/todo/${id}`, {
 		method: 'delete',
 		headers: {
 			'X-Parse-Application-Id': '8t5ZKASH24D5ML6z49AYtS9zUJRzwtRtQIL6IHkO',
-			'X-Parse-REST-API-Key' : 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5'
+			'X-Parse-REST-API-Key': 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5'
 		}
 	})
-		.then(response => response.json());
+	if (!response.ok) {
+		const error = new Error(`status: ${response.status}`)
+		error.name = 'ServerCommunicationError';
+		throw error;
+	} else return response;
 }
 
 
-function asyncSetStatus(id, status) {
+async function asyncSetStatus(id, status) {
 
-	return fetch(`https://parseapi.back4app.com/classes/todo/${id}`, {
+	const response = await fetch(`https://parseapi.back4app.com/classes/todo/${id}`, {
 		method: 'put',
 		headers: {
 			'X-Parse-Application-Id': '8t5ZKASH24D5ML6z49AYtS9zUJRzwtRtQIL6IHkO',
-			'X-Parse-REST-API-Key' : 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5',
+			'X-Parse-REST-API-Key': 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5',
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify({status})
 	});
+
+	if (!response.ok) {
+		const error = new Error(`status: ${response.status}`)
+		error.name = 'ServerCommunicationError';
+		throw error;
+	} else return response.json();
 
 }
 

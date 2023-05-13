@@ -1,5 +1,6 @@
 @import 'fonts.scss';
 @import 'declarations.scss';
+@import 'error.scss';
 
 
 html {
@@ -17,7 +18,7 @@ body {
 	color: $app_green;
 }
 
-h1 {
+h1, h5 {
 	margin: 0;
 }
 
@@ -87,14 +88,33 @@ button {
 	background-color: $todo_bg;
 	font-size: 0.7rem;
 	position: relative;
+	transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+	&:hover {
+		transform: scale(101%, 105%);
+		box-shadow: 0 0 10px $green_shadow;
+	}
 }
 
 .todo__icon {
 	border-radius: 50%;
-	width: 15px;
-	height: 15px;
-	background-color: $app_green;
+	width: 20px;
+	height: 20px;
+	background: radial-gradient($app_green 35%, #000);
 	margin-left: 10px;
+	position: relative;
+	&:before {
+		content: '`';
+		color: white;
+		position: absolute;
+		left: 12px;
+		top: -1px;
+		font-size: 22px;
+		transform: rotate(0deg);
+	}
+}
+
+.todo__icon_yellow {
+	background: radial-gradient($app_yellow 35%, #000);
 }
 
 .todo__title {
@@ -130,14 +150,21 @@ button {
 
 .todo__details {
 	position: absolute;
-	top: 40px;
+	top: 43px;
 	left: 1.5%;
 	width: 97%;
 	height: auto;
 	padding: 10px 0 20px;
 	border: 1px $app_green solid;
 	background-color: $hover_bg;
-	z-index: 5;
+	transition: all 0.3s linear;
+	visibility: hidden;
+	opacity: 0;
+	overflow: hidden;
+}
+.todo__details_show {
+	visibility: visible;
+	opacity: 1;
 }
 
 .todo__details-item {

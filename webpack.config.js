@@ -18,7 +18,8 @@ module.exports = {
 	plugins: [
 		new HTMLWebpackPlugin({
 			template: './index.html',
-			inject: 'body'
+			inject: 'body',
+			favicon: 'icon.png'
 		}),
 		new MiniCssExtractPlugin({
 			filename: 'style.[contenthash].css'
@@ -37,6 +38,10 @@ module.exports = {
 			{
 				test: /\.css$/,
 				use: [MiniCssExtractPlugin.loader, 'css-loader']
+			},
+			{
+				test: /\.svg$/,
+				use: 'file-loader'
 			}
 		]
 	}

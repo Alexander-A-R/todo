@@ -1,3 +1,5 @@
+//создать класс------------------!!!!!!!!!!!!!
+
 function createModal(contentElement) {
 	const modal = document.createElement('div');
 	modal.addEventListener('click', (e) => {
@@ -31,10 +33,15 @@ function createModal(contentElement) {
 	return modal;
 }
 
+function showModal() {
+	const modal = document.querySelector('.modal');
+	document.body.append(modal);
+}
+
 function closeModal() {
 	const modal = document.querySelector('.modal');
 	modal.remove();
 	document.body.style.overflow = '';
 }
 
-export {createModal, closeModal};
+export {createModal, showModal, closeModal};

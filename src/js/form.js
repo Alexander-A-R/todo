@@ -1,6 +1,7 @@
 import {closeModal} from './modal.js'
 import {renderAndInitTodo} from './todoDom.js'
 import {asyncAddTodo} from './database.js'
+import {errorMessage} from './error.js'
 
 function createFormAddTodo() {
 	const formDiv = document.createElement('div');
@@ -54,16 +55,23 @@ function createFormAddTodo() {
 	buttonAdd.innerHTML = 'Создать';
 	buttonAdd.classList.add('form__button');
 
-	buttonAdd.addEventListener('click', () => {
+	buttonAdd.addEventListener('click', async () => {
 		const newTodoData = getTodoFromForm();
 		newTodoData.status = 'shedule';
 
-		asyncAddTodo(newTodoData).then(data => {
-			newTodoData.objectId = data.objectId;
-			newTodoData.createdAt = data.createdAt;
+		try {
+
+			const response = await asyncAddTodo(newTodoData);
+			newTodoData.objectId = response.objectId;
+			newTodoData.createdAt = response.createdAt;
 			renderAndInitTodo(newTodoData);
+
+		} catch(err) {
+			errorMessage('Не удалось создать задачу');
+			console.error(err);
+		} finally {
 			closeModal();
-		})
+		}
 		
 	})
 
