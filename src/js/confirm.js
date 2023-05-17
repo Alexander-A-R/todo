@@ -1,4 +1,4 @@
-function createConfirmHtml() {
+export function createConfirmHtml() {
 	return `<div class="confirm">
 			<div class="confirm__container">
 				<h1 class="confirm__title">Удалить задачу?</h1>
@@ -9,5 +9,3 @@ function createConfirmHtml() {
 			</div>
 		</div>`
 }
-
-export {createConfirmHtml};

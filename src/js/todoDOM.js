@@ -19,10 +19,10 @@ function createTodoHtml() {
 						<button class="todo__button todo__button_close">X</button>
 					</div>
 					<div class="todo__details">
-						<p class="todo__details-item todo__details-item_description">
+						<p class="todo__details-item">
 							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim culpa dolore quibusdam expedita repellat quia veniam suscipit tempore cumque assumenda, ipsam architecto. Sit inventore maiores impedit, facilis facere nihil dolore?
 						</p>
-						<p class="todo__details-item todo__details-item_comments">Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta sint fugiat nostrum hic tempore porro suscipit eveniet ut inventore laboriosam esse accusamus harum est adipisci, officia ad blanditiis velit dolores?</p>
+						<textarea class="todo__details-edit"></textarea>
 					</div>
 				</div>`
 }
@@ -140,7 +140,24 @@ function renderAndInitTodo({objectId, title, status, createdAt}) {
 		})
 
 		no.addEventListener('click', (e) => closeModal());
+
 	})
+
+	const details = todo.querySelector('.todo__details-item');
+	const detailsEditArea = todo.querySelector('.todo__details-edit');
+
+		details.addEventListener('click', (e) => {
+			const detailsText = e.target.innerText;
+			const height = getComputedStyle(details).height;
+			const offsetTop = details.offsetTop;
+			const offsetLeft = details.offsetLeft;
+			
+			detailsEditArea.value = detailsText;
+			detailsEditArea.style.height = height;
+			detailsEditArea.style.top = offsetTop + 'px';
+			detailsEditArea.style.left = offsetLeft + 'px';
+			detailsEditArea.style.display = 'block';
+		});
 
 }
 

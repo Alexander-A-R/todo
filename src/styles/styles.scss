@@ -79,17 +79,18 @@ button {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	height: 55px;
 	min-width: 600px;
 	padding: 10px;
 	margin: 10px;
 	border: 1px $app_green solid;
-	border-radius: 3px;
+	border-radius: 10px;
 	box-shadow: 0 0 5px $green_shadow;
 	box-sizing: border-box;	
 	background-color: $todo_bg;
 	font-size: 0.7rem;
 	position: relative;
-	transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+	transition: transform 0.1s ease-out, box-shadow 0.2s ease-out;
 	&:hover {
 		transform: scale(101%, 105%);
 		box-shadow: 0 0 10px $green_shadow;
@@ -138,6 +139,7 @@ button {
 	white-space: nowrap;
 }
 .todo__button {
+	margin: 0 1px;
 	width: 23px;
 	height: 23px;
 }
@@ -151,7 +153,7 @@ button {
 
 .todo__details {
 	position: absolute;
-	top: 43px;
+	top: 50px;
 	left: 1.5%;
 	width: 97%;
 	height: auto;
@@ -161,7 +163,6 @@ button {
 	transition: all 0.3s linear;
 	visibility: hidden;
 	opacity: 0;
-	overflow: hidden;
 }
 .todo__details_show {
 	visibility: visible;
@@ -172,25 +173,36 @@ button {
 	position: relative;
 	width: 80%;
 	margin: 20px auto 0;
+	padding: 5px;
+	box-sizing: border-box;
+	cursor: pointer;
 	&:before {
-		content: '';
+		content: 'Заметки: ';
 		color: $app_red;
 		position: absolute;
 		top: -18px;
 		left: 50%;
 		transform: translateX(-50%);
 		font-weight: 600;
+		cursor: default;
 	}
 }
-.todo__details-item_description {
-	&:before {
-		content: 'Описание';
-	}
-}
-.todo__details-item_comments {
-	&:before {
-		content: 'Комментарии';
-	}
+.todo__details-edit {
+	display: none;
+	border-radius: 5px;
+	font-family: inherit;
+	font-size: 0.7rem;
+	letter-spacing: 0.07rem;
+	position: absolute;
+	border: none;
+	width: 80%;
+	padding: 5px;
+	color: $app_green;
+	background-color: $todo_bg;
+	resize: none;
+	box-sizing: border-box;
+	z-index: 100;
+	@include input_focus($input_focus_clr);
 }
 
 //----------------Секции------------------

@@ -20,7 +20,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	showAllTodos();
 
+	document.addEventListener('click', documentClick);
+
 })
+
+function documentClick(e) {
+	if (!e.target.classList.contains('todo__details-edit') && !e.target.classList.contains('todo__details-item')) {
+		const allDetailsAreas = document.querySelectorAll('.todo__details-edit');
+		allDetailsAreas.forEach(detailEditArea => {
+			if (detailEditArea.style.display === 'block') {
+				const details = detailEditArea.parentElement.querySelector('.todo__details-item');
+				details.innerText = detailEditArea.value;
+				detailEditArea.style.display = 'none';
+				console.log(e.target)
+			}
+		})
+	}
+} 
 
 
 
