@@ -1,6 +1,6 @@
 import {closeModal} from './modal.js'
 import {renderAndInitTodo} from './todoDom.js'
-import {asyncAddTodo} from './database.js'
+import {asyncAddTodo} from './databaseAPI.js'
 import {errorMessage} from './error.js'
 import {showPreloader, hidePreloader} from './preloader.js'
 
@@ -104,7 +104,7 @@ function getTodoFromForm() {
 	
 	const formData = {
 		title: formElements.title.value,
-		description: formElements.description.value
+		details: formElements.description.value || 'Нет записей...'
 	}
 
 	form.reset();

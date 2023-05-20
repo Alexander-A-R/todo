@@ -204,6 +204,10 @@ button {
 	z-index: 100;
 	@include input_focus($input_focus_clr);
 }
+.todo__details-btn-save {
+	display: block;
+	margin: 10px auto 0;
+}
 
 //----------------Секции------------------
 

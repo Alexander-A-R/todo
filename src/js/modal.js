@@ -1,4 +1,4 @@
-//создать класс------------------!!!!!!!!!!!!!
+
 
 function createModal(contentElement) {
 	const modal = document.createElement('div');

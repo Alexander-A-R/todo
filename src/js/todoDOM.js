@@ -1,5 +1,5 @@
 import {toggleTodo} from './index.js'
-import {asyncDeleteTodo} from './database.js'
+import {asyncDeleteTodo, asyncSetDetails} from './databaseAPI.js'
 import {createConfirmHtml} from './confirm.js'
 import {createModal} from './modal.js'
 import {closeModal} from './modal.js'
@@ -23,13 +23,14 @@ function createTodoHtml() {
 							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim culpa dolore quibusdam expedita repellat quia veniam suscipit tempore cumque assumenda, ipsam architecto. Sit inventore maiores impedit, facilis facere nihil dolore?
 						</p>
 						<textarea class="todo__details-edit"></textarea>
+						<button class="todo__details-btn-save">Редактировать</button>
 					</div>
 				</div>`
 }
 
 //---------------------добавление элемента задачи и инициализация-----------
 
-function renderAndInitTodo({objectId, title, status, createdAt}) {
+function renderAndInitTodo({objectId, title, status, createdAt, details}) {
 
 //----------------------добавление в документ----------------------
 
@@ -60,6 +61,9 @@ function renderAndInitTodo({objectId, title, status, createdAt}) {
 
 	const titleElement = todo.querySelector('.todo__title');		//	название
 	titleElement.innerHTML = title;
+
+	const detailsElement = todo.querySelector('.todo__details-item');
+	detailsElement.innerText = details;
 
 	const date = todo.querySelector('.todo__date');			//	дата
 	date.innerHTML = parseDate(createdAt);
@@ -97,7 +101,18 @@ function renderAndInitTodo({objectId, title, status, createdAt}) {
 
 	const transitionEndHandler = () => todo.style.removeProperty('z-index');
 
-	detailsBtn.addEventListener('click', () => {
+	detailsBtn.addEventListener('click', (e) => {
+
+		const currentTodo = e.target.closest('.todo');
+		const currentDetails = currentTodo.querySelector('.todo__details');
+
+		const prevOpenDetails = document.querySelector('.todo__details_show');
+		if (prevOpenDetails && prevOpenDetails !== currentDetails) {
+			prevOpenDetails.classList.remove('todo__details_show');
+			prevOpenDetails.closest('.todo').style.removeProperty('z-index');
+			prevOpenDetails.removeEventListener('transitionend', transitionEndHandler);
+		}
+
 		todo.querySelector('.todo__details').classList.toggle('todo__details_show');
 		const details = todo.querySelector('.todo__details');
 		if (todo.style.zIndex != '5') {
@@ -143,22 +158,51 @@ function renderAndInitTodo({objectId, title, status, createdAt}) {
 
 	})
 
-	const details = todo.querySelector('.todo__details-item');
-	const detailsEditArea = todo.querySelector('.todo__details-edit');
 
-		details.addEventListener('click', (e) => {
-			const detailsText = e.target.innerText;
-			const height = getComputedStyle(details).height;
-			const offsetTop = details.offsetTop;
-			const offsetLeft = details.offsetLeft;
+	const detSaveBtn = todo.querySelector('.todo__details-btn-save');
+
+	detSaveBtn.addEventListener('click', (e) => {
+
+		const detailsEditArea = e.target.parentElement.querySelector('.todo__details-edit');
+		const detailsText = detailsElement.innerText;
+		const detailsNewText = detailsEditArea.value || 'Нет записей...';
+
+		if (detailsEditArea.style.display !== 'block') {
 			
+			const height = getComputedStyle(detailsElement).height;
+			const offsetTop = detailsElement.offsetTop;
+			const offsetLeft = detailsElement.offsetLeft;
+				
 			detailsEditArea.value = detailsText;
 			detailsEditArea.style.height = height;
 			detailsEditArea.style.top = offsetTop + 'px';
 			detailsEditArea.style.left = offsetLeft + 'px';
 			detailsEditArea.style.display = 'block';
-		});
 
+			e.target.innerText = 'Сохранить';
+		} else {
+			
+			if (detailsText !== detailsNewText) {
+				showPreloader();
+				asyncSetDetails(objectId, detailsNewText)
+				.finally(() => hidePreloader())
+				.then(() => {
+					detailsElement.innerText = detailsNewText;
+					detailsEditArea.style.display = 'none';
+					e.target.innerText = 'Редактировать'
+				})
+				.catch(err => {
+					errorMessage('Не удалось сохранить запись');
+					console.error(err);
+				})
+			} else {
+				detailsEditArea.style.display = 'none';
+				e.target.innerText = 'Редактировать'
+				console.log('save')
+			}
+		}
+		
+	})
 }
 
 //----------------------------------------------------------------------

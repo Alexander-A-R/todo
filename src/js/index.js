@@ -1,10 +1,11 @@
 import '../styles/styles.scss'
 import {createModal} from './modal.js'
 import {createFormAddTodo} from './form.js'
-import {asyncSetStatus, asyncGetTodo, asyncGetAllTodos} from './database.js'
+import {asyncSetStatus, asyncGetTodo, asyncGetAllTodos} from './databaseAPI'
 import {renderAllTodos, renderAndInitTodo} from './todoDom.js'
 import {errorMessage} from './error.js'
 import {showPreloader, hidePreloader} from './preloader.js'
+import {Login} from './userAPI.js'
 
 
 
@@ -20,23 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	showAllTodos();
 
-	document.addEventListener('click', documentClick);
-
 })
-
-function documentClick(e) {
-	if (!e.target.classList.contains('todo__details-edit') && !e.target.classList.contains('todo__details-item')) {
-		const allDetailsAreas = document.querySelectorAll('.todo__details-edit');
-		allDetailsAreas.forEach(detailEditArea => {
-			if (detailEditArea.style.display === 'block') {
-				const details = detailEditArea.parentElement.querySelector('.todo__details-item');
-				details.innerText = detailEditArea.value;
-				detailEditArea.style.display = 'none';
-				console.log(e.target)
-			}
-		})
-	}
-} 
 
 
 
@@ -87,3 +72,38 @@ async function toggleTodo(id) {
 export {toggleTodo}
 
 
+const body = {
+	password: 'qwerty',
+	username: 'Alex',
+	email: 'alex@mail.com'
+}
+
+
+function createUser() {
+	fetch('https://parseapi.back4app.com/users', {
+		method: 'post',
+		headers: {
+			'X-Parse-Application-Id': '8t5ZKASH24D5ML6z49AYtS9zUJRzwtRtQIL6IHkO',
+			'X-Parse-REST-API-Key': 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(body)
+	})
+		.then(response => response.json())
+		.then(data => console.log(data))
+}
+
+	/*fetch('https://parseapi.back4app.com/login?username=Alex&password=qwerty', {
+		method: 'get',
+		headers: {
+			'X-Parse-Application-Id': '8t5ZKASH24D5ML6z49AYtS9zUJRzwtRtQIL6IHkO',
+			'X-Parse-REST-API-Key': 'pcTtwjZ1vW2tdIhlizzzKrAb7pBMDR1QJ2f81lO5',
+			'X-Parse-Revocable-Session': '1'
+		}
+	})
+		.then(response => response.json())
+		.then(data => console.log(data))*/
+
+
+//window.user = new Login('Alex', 'qwerty');
+//window.user.sendLogin().then(() => console.log(user._sessionToken));
