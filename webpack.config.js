@@ -18,12 +18,12 @@ module.exports = {
 	},
 	plugins: [
 		new HTMLWebpackPlugin({
-			template: './index.html',
+			template: 'index.html',
 			inject: 'body',
-			favicon: 'icon.png'
+			favicon: 'icon.png',
 		}),
 		new MiniCssExtractPlugin({
-			filename: 'style.[contenthash].css'
+			filename: 'style.[contenthash].css',
 		})
 	],
 	module: {

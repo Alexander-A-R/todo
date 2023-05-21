@@ -5,13 +5,26 @@ import {asyncSetStatus, asyncGetTodo, asyncGetAllTodos} from './databaseAPI'
 import {renderAllTodos, renderAndInitTodo} from './todoDom.js'
 import {errorMessage} from './error.js'
 import {showPreloader, hidePreloader} from './preloader.js'
-import {Login} from './userAPI.js'
+import {LoginPage} from './login.js'
 
 
 
 document.addEventListener('DOMContentLoaded', () => {
 
-	document.querySelector('.addTodo').addEventListener('click', () => {
+	if (!localStorage.getItem('sessionToken')) {
+		const loginPage = new LoginPage();
+		loginPage.open();
+	} else {
+		todoInit();
+	}
+
+	
+
+})
+
+
+function todoInit() {
+	document.body.querySelector('.header__addTodo').addEventListener('click', () => {
 
 		const modal = createModal(createFormAddTodo());
 		document.body.append(modal);
@@ -19,12 +32,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	});
 
+	document.body.querySelector('.header__logout').addEventListener('click', () => {
+		localStorage.clear();
+		window.location.reload();
+	})
+
 	showAllTodos();
-
-})
-
-
-
+}
 
 //-----------------загружает все задачи и выводит их-----------------------
 
@@ -69,7 +83,7 @@ async function toggleTodo(id) {
 
 }
 
-export {toggleTodo}
+export {toggleTodo, todoInit}
 
 
 const body = {

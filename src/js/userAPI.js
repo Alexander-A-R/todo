@@ -13,7 +13,7 @@ export class Login {
             }
         },
         this._sessionToken = '';
-        this.login = false;
+        this.ok = false;
         this.error = false;
     }
 
@@ -27,7 +27,7 @@ export class Login {
                 throw error;
             } else {
                 const data = await response.json();
-                this.login = true;
+                this.ok = true;
                 this._sessionToken = data.sessionToken;
                 localStorage.setItem('sessionToken', this._sessionToken);
             }
@@ -37,6 +37,7 @@ export class Login {
                 const dataError = await error.response.json();
                 error.message = `${dataError.code} ${dataError.error}`;
                 console.error(error);
+                throw error;
             } else {
                 throw error; 
             }

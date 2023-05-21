@@ -218,8 +218,22 @@ button {
 }
 
 .header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 	padding: 10px;
 	background-color: #706e69;
+}
+.header__userbar {
+	display: flex;
+	align-items: center;
+}
+.header__username {
+	font-size: 0.7rem;
+	margin-right: 20px;
+}
+.header__logout {
+
 }
 
 //---------------Модальное окно------------------
@@ -369,4 +383,21 @@ button {
 .confirm__btn {
 	width: 90px;
 	margin: 0 10px;
+}
+.window-login {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: $app_bg;
+	z-index: 50;
+}
+.login-content {
+	border: 1px $app_red solid;
+	height: 50%;
+	width: 50%;
+	min-width: 500px;
+	margin: 10% auto 0;
+	text-align: center;
 }

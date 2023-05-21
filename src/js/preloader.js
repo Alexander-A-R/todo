@@ -1,5 +1,5 @@
-import preloader from '../assets/preloader.svg'
-import preloader_black from '../assets/preloader_black.svg'
+import preloader from '../assets/svg/preloader.svg'
+import preloader_black from '../assets/svg/preloader_black.svg'
 
 
 function showPreloader(color = undefined) {
